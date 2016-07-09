@@ -3,7 +3,7 @@
 
 // Initialize pins
 const int pingPin = 7; // Connect to PW pin on Sensor and MSP P1.5
-const int motorPin = 2; // PWM on MSP 1.1 (A1) or P2.1 (9) LED Pin 2
+const int motorPin = 9; // PWM on MSP 1.1 (A1) or P2.1 (9) LED Pin 2
 
 void setup() {
   // initialize serial communication:
@@ -42,7 +42,14 @@ void loop() {
   Serial.println();
 
   delay(100);
+  
+  // Linear Intensity
+  int intensity = 255/inches;
+  Serial.println(intensity);
+  analogWrite(motorPin, intensity);
 
+/*
+// Discrete Step Intensity
   if (inches < 10) {
  analogWrite(motorPin, 255);
  //digitalWrite(motorPin, HIGH);
@@ -58,7 +65,7 @@ void loop() {
  }
  else {
   digitalWrite(motorPin, LOW);
-}
+} */
 
 
 }
@@ -69,12 +76,12 @@ long microsecondsToInches(long microseconds) {
   // second).  This gives the distance travelled by the ping, outbound
   // and return, so we divide by 2 to get the distance of the obstacle.
   // See: http://www.parallax.com/dl/docs/prod/acc/28015-PING-v1.3.pdf
-  return microseconds / 74 / 2;
+  return microseconds / 147;
 }
 
 long microsecondsToCentimeters(long microseconds) {
   // The speed of sound is 340 m/s or 29 microseconds per centimeter.
   // The ping travels out and back, so to find the distance of the
   // object we take half of the distance travelled.
-  return microseconds / 29 / 2;
+  return microsecondsToInches(microseconds)*2.54;
 }
